@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 public class MainScreenController implements Initializable {
 
@@ -61,19 +62,13 @@ public class MainScreenController implements Initializable {
 
 
 
-    String artistBand,title,type,URL;
+    String ArtistBand,title,type,URL;
     String duration; //duration should be changed to a data type that allows easy conversion to TIME (in MySQL)
-
-//    public void AddButtonEvent(ActionEvent actionEvent)
-//    {
-//        //ListenUp listenUpObj = new ListenUp( artistBand,  title,  duration,  type,  URL);
-//
-//    }
 
 
     //check the method for adding values to DB from TextFields
 
-
+    ObservableList<ListenUp> listenUpList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(java.net.URL url, ResourceBundle resourceBundle) {
@@ -84,24 +79,45 @@ public class MainScreenController implements Initializable {
         tableViewType.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Type"));
         tableViewDuration.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Duration"));
 
-        //load dummy data
-        tableViewObject.setItems(getListenUpSongs());
+        tableViewObject.setItems(getAllSongs());
+    }
+
+    public void SeeAllSongsOnMouseClick(MouseEvent mouseEvent) throws SQLException {
+
+        tableViewObject.getItems().clear();
+
+        try {
+            Connection conn = getConnection();
+            ResultSet resultSet = conn.createStatement().executeQuery("select * from songs");
+
+            while(resultSet.next()){
+                String ArtistBand = resultSet.getString("ArtistBand");
+                String Title = resultSet.getString("Title");
+                String Type = resultSet.getString("Type");
+                String Duration = resultSet.getString("Duration");
+                listenUpList.add(new ListenUp(ArtistBand, Title, Duration, Type));
+            }
+        }
+            catch(SQLException e)
+            {
+            }
+
+        tableViewArtist.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("ArtistBand"));
+        tableViewTitle.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Title"));
+        tableViewType.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Type"));
+        tableViewDuration.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Duration"));
+
 
     }
 
-    ObservableList<ListenUp> getSongs(){
-        ObservableList<ListenUp> songs = FXCollections.observableArrayList();
-        songs.add(new ListenUp("das","dasd","dssaf","dfsa","321sad"));
-        return songs;
-    }
-    //get all songs
-    public ObservableList<ListenUp> getListenUpSongs()
+    //gets all songs
+    public ObservableList<ListenUp> getAllSongs()
     {
         try {
             Connection conn = getConnection();
-            PreparedStatement ps = conn.prepareStatement("select * from listen_up");
+            PreparedStatement ps = conn.prepareStatement("select * from songs");
             ResultSet rs = ps.executeQuery();
-            ObservableList<ListenUp> listenUpList = FXCollections.observableArrayList();
+
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String ArtistBand = rs.getString("ArtistBand");
@@ -121,8 +137,8 @@ public class MainScreenController implements Initializable {
     }
 
 
-
-    public void addArtistOnMouseClicked(MouseEvent mouseEvent) {
+    //NEED TO ADD CONDITIONS FOR ADDING SONGS (can't insert the song if it is already in the DB)
+    public void addSongOnMouseClicked(MouseEvent mouseEvent) {
         ListenUp song = new ListenUp(artistTextField.getText(),titleTextField.getText(),durationTextField.getText(),typeTextField.getText(),urlTextField.getText());
         //ListenUp song = new ListenUp();
         try
@@ -148,6 +164,22 @@ public class MainScreenController implements Initializable {
         }
     }
 
+    public void DeleteSongOnMouseClicked(MouseEvent mouseEvent)
+    {
+//        try
+//        {
+//            Connection conn = getConnection();
+//            PreparedStatement ps = conn.prepareStatement("delete from songs where id = ?");
+//            ps.setInt(1, id);
+//            int affectedRows = ps.executeUpdate();
+//            closeConnection(conn);
+//            return affectedRows == 1;
+//        }
+//        catch(SQLException e)
+//        {
+//            return false;
+//        }
+    }
 
 
     public Connection getConnection() throws SQLException
@@ -159,4 +191,7 @@ public class MainScreenController implements Initializable {
     {
         conn.close();
     }
+
+
+
 }

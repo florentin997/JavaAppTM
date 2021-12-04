@@ -14,11 +14,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="553.0" maxWidth="966.0" minHeight="500.0" minWidth="900.0" prefHeight="553.0" prefWidth="966.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ListenUp.MainScreenController">
+<BorderPane maxHeight="556.0" maxWidth="1065.0" minHeight="500.0" minWidth="900.0" prefHeight="556.0" prefWidth="1023.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ListenUp.MainScreenController">
    <left>
       <VBox prefHeight="355.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="250.0" style="-fx-border-color: Black;" text="Playlist" textAlignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="250.0" style="-fx-border-color: Black;" text="Playlist" textAlignment="CENTER">
                <effect>
                   <Blend mode="HARD_LIGHT" />
                </effect>
@@ -26,10 +26,10 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <TreeView />
+            <TreeView prefHeight="343.0" prefWidth="250.0" />
             <Pane prefHeight="84.0" prefWidth="239.0">
                <children>
-                  <Button id="create_new_playlist_button" fx:id="create_new_playlist_button" alignment="CENTER" layoutX="37.0" layoutY="5.0" mnemonicParsing="false" style="-fx-background-color: #f9a924;" text="Create new playlist">
+                  <Button id="create_new_playlist_button" fx:id="create_new_playlist_button" alignment="CENTER" layoutX="43.0" layoutY="17.0" mnemonicParsing="false" style="-fx-background-color: #f9a924;" text="Create new playlist">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -44,11 +44,11 @@
          <children>
             <Pane prefHeight="154.0" prefWidth="966.0">
                <children>
-                  <TextField fx:id="artistTextField" alignment="CENTER" layoutX="46.0" layoutY="32.0" prefHeight="25.0" prefWidth="131.0" promptText="Artist/Band" />
-                  <TextField fx:id="typeTextField" alignment="CENTER" layoutX="423.0" layoutY="32.0" maxWidth="300.0" minWidth="100.0" prefHeight="25.0" prefWidth="135.0" promptText="Type of song" />
-                  <TextField fx:id="durationTextField" alignment="CENTER" layoutX="842.0" layoutY="32.0" maxWidth="300.0" minWidth="49.0" prefHeight="25.0" prefWidth="65.0" promptText="Duration" />
-                  <TextField fx:id="titleTextField" alignment="CENTER" layoutX="229.0" layoutY="32.0" prefHeight="25.0" prefWidth="130.0" promptText="Title" />
-                  <TextField fx:id="urlTextField" alignment="CENTER" layoutX="633.0" layoutY="32.0" maxWidth="300.0" minWidth="100.0" promptText="youtube URL" />
+                  <TextField fx:id="artistTextField" alignment="CENTER" layoutX="60.0" layoutY="32.0" prefHeight="25.0" prefWidth="131.0" promptText="Artist/Band" />
+                  <TextField fx:id="typeTextField" alignment="CENTER" layoutX="479.0" layoutY="32.0" maxWidth="300.0" minWidth="100.0" prefHeight="25.0" prefWidth="135.0" promptText="Type of song" />
+                  <TextField fx:id="durationTextField" alignment="CENTER" layoutX="929.0" layoutY="32.0" maxWidth="300.0" minWidth="49.0" prefHeight="25.0" prefWidth="65.0" promptText="Duration" />
+                  <TextField fx:id="titleTextField" alignment="CENTER" layoutX="246.0" layoutY="32.0" prefHeight="25.0" prefWidth="130.0" promptText="Title" />
+                  <TextField fx:id="urlTextField" accessibleRole="HYPERLINK" alignment="CENTER" layoutX="706.0" layoutY="32.0" maxWidth="300.0" minWidth="100.0" promptText="youtube URL" />
                </children>
             </Pane>
             <HBox alignment="CENTER" prefHeight="8.0" prefWidth="966.0">
@@ -59,7 +59,7 @@
                   <Blend />
                </effect>
                <children>
-                  <Button  fx:id="add_button" mnemonicParsing="false" onMouseClicked="#addArtistOnMouseClicked" prefHeight="35.0" prefWidth="111.0" style="-fx-background-color: #81ed67;" text="Add" textAlignment="CENTER">
+                  <Button fx:id="add_button" mnemonicParsing="false" onMouseClicked="#addSongOnMouseClicked" prefHeight="35.0" prefWidth="111.0" style="-fx-background-color: #81ed67;" text="Add" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -70,7 +70,7 @@
                         <Insets bottom="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button id="see_all_button" fx:id="see_all_button" mnemonicParsing="false" prefHeight="35.0" prefWidth="102.0" style="-fx-background-color: #1ed1d9;" text="See all" textAlignment="CENTER">
+                  <Button id="see_all_button" fx:id="see_all_button" mnemonicParsing="false" onMouseClicked="#SeeAllSongsOnMouseClick" prefHeight="35.0" prefWidth="102.0" style="-fx-background-color: #1ed1d9;" text="See all" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -78,7 +78,7 @@
                         <Insets bottom="5.0" left="50.0" right="50.0" />
                      </HBox.margin>
                   </Button>
-                  <Button id="delete_button" fx:id="delete_button" mnemonicParsing="false" prefHeight="35.0" prefWidth="97.0" style="-fx-background-color: #fa5954;" text="Delete" textAlignment="CENTER">
+                  <Button id="delete_button" fx:id="delete_button" mnemonicParsing="false" onMouseClicked="#DeleteSongOnMouseClicked" prefHeight="35.0" prefWidth="97.0" style="-fx-background-color: #fa5954;" text="Delete" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -92,12 +92,13 @@
       </VBox>
    </bottom>
    <center>
-      <TableView fx:id="tableViewObject" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableViewObject" prefWidth="753.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="tableViewArtist" prefWidth="273.0" text="Artist/Band" />
           <TableColumn fx:id="tableViewTitle" minWidth="0.0" prefWidth="269.0" text="Title" />
-            <TableColumn fx:id="tableViewType" prefWidth="100.0" text="Type" />
-            <TableColumn fx:id="tableViewDuration" minWidth="0.0" prefWidth="59.0" text="Duration" />
+            <TableColumn fx:id="tableViewType" prefWidth="118.0" text="Type" />
+            <TableColumn fx:id="tableViewDuration" minWidth="0.0" prefWidth="68.0" text="Duration" />
+            <TableColumn fx:id="tableViewCheckBox" minWidth="0.0" prefWidth="33.0" />
         </columns>
       </TableView>
    </center>

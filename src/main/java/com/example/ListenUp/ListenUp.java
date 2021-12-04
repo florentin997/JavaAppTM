@@ -36,6 +36,14 @@ public class ListenUp {
         this.URL = URL;
     }
 
+    public ListenUp(String artistBand, String title, String duration, String type) {
+        super();
+        ArtistBand = artistBand;
+        Title = title;
+        Duration = duration;
+        Type = type;
+    }
+
     public int getId() {
         return id;
     }
