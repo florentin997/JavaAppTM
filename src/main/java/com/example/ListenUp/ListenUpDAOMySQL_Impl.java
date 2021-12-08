@@ -13,7 +13,7 @@ import java.sql.Connection;
 	public class ListenUpDAOMySQL_Impl implements ListenUpDAO
 	{
 		
-		public static final String CONNECTION_URL = "jdbc:mysql://localhost/listenup_db";   // I HAVE TO DEFINE THE TABLE !!!
+		public static final String CONNECTION_URL = "jdbc:mysql://localhost/listenup_db";
 
 		@Override
 		public void addSongs(ListenUp lis)
@@ -135,7 +135,7 @@ import java.sql.Connection;
 		
 		public Connection getConnection() throws SQLException
 		{
-			return DriverManager.getConnection(CONNECTION_URL, "root", "train");
+			return DriverManager.getConnection(CONNECTION_URL, "root", "strongpassword99!");
 		}
 		
 		public void closeConnection(Connection conn) throws SQLException

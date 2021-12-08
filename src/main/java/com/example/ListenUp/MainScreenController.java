@@ -10,8 +10,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 
+import javax.security.auth.callback.Callback;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ResourceBundle;
@@ -164,22 +166,24 @@ public class MainScreenController implements Initializable {
         }
     }
 
-    public void DeleteSongOnMouseClicked(MouseEvent mouseEvent)
-    {
+
+
+//    public void DeleteSongOnMouseClicked(MouseEvent mouseEvent)
+//    {
+//        ListenUp selectedObject = tableViewObject.getSelectionModel().getSelectedItem();
+//        int selectedItemID = selectedObject.getId();
 //        try
 //        {
 //            Connection conn = getConnection();
 //            PreparedStatement ps = conn.prepareStatement("delete from songs where id = ?");
-//            ps.setInt(1, id);
-//            int affectedRows = ps.executeUpdate();
+//            ps.setInt(1, selectedItemID);  //1 stands for the index of the given parameters
 //            closeConnection(conn);
-//            return affectedRows == 1;
 //        }
 //        catch(SQLException e)
 //        {
-//            return false;
+//
 //        }
-    }
+//    }
 
 
     public Connection getConnection() throws SQLException
@@ -192,6 +196,24 @@ public class MainScreenController implements Initializable {
         conn.close();
     }
 
+    public void delete(int id) {  //replaced bool with void
+        try {
+            Connection conn = getConnection();
+            PreparedStatement ps = conn.prepareStatement("delete from songs where id = ?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            //int affectedRows = ps.executeUpdate();
+            closeConnection(conn);
+            //return affectedRows == 1;
+        }
+        catch (SQLException e) {
+            //return false;
+        }
+    }
 
-
+    //THE ITEM IS SELECTED AND REMOVED ONLY THE FIRST TIME I EXECUTE THE CODE
+    public void DeleteSongOnMouseClicked(MouseEvent mouseEvent) {
+        ListenUp selectedObject = tableViewObject.getSelectionModel().getSelectedItem();
+        delete(selectedObject.getId());
+    }
 }
