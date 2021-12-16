@@ -10,6 +10,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -43,6 +45,8 @@ public class MainScreenController implements Initializable {
     private TableView<ListenUp> tableViewObject;
     //Columns
     @FXML
+    private TableColumn<ListenUp, String> tableViewId;
+    @FXML
     private TableColumn<ListenUp, String> tableViewArtist;
     @FXML
     private TableColumn<ListenUp, String> tableViewTitle;
@@ -52,23 +56,15 @@ public class MainScreenController implements Initializable {
     private TableColumn<ListenUp, String> tableViewDuration;
     //The text fields in which the user inputs data
     @FXML
-    private TextField artistTextField,typeTextField,durationTextField,titleTextField, urlTextField;
+    private TextField artistTextField,durationTextField,titleTextField, urlTextField;
 
-    //a list of song objects (listenUp objects)
-    //@FXML
-    //TableColumn<ListenUp
-    //
-    // ,String> TableViewArtist,TableViewTitle, TableViewType, TableViewDuration; //keep duration as string or double???
-
-    //TableViewArtist = new TableColumn<>("Artist/Band");
-
+    //ObservableList<String> musicTypes = FXCollections.observableArrayList();
+    @FXML
+    private ComboBox typeComboBox=new ComboBox();
 
 
     String ArtistBand,title,type,URL;
     String duration; //duration should be changed to a data type that allows easy conversion to TIME (in MySQL)
-
-
-    //check the method for adding values to DB from TextFields
 
     ObservableList<ListenUp> listenUpList = FXCollections.observableArrayList();
 
@@ -76,9 +72,11 @@ public class MainScreenController implements Initializable {
     public void initialize(java.net.URL url, ResourceBundle resourceBundle) {
 
         //set up the columns in the table
+        //tableViewId.setCellValueFactory(new PropertyValueFactory<ListenUp,String>("Id"));
         tableViewArtist.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("ArtistBand"));
         tableViewTitle.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Title"));
-        tableViewType.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Type"));
+        //tableViewType.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Type"));
+        typeComboBox.getItems().addAll("Rock","Pop","Country","Folk","Jazz","Hip Hop", "Rap","Electronic","Indie","Classical");
         tableViewDuration.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Duration"));
 
         tableViewObject.setItems(getAllSongs());
@@ -90,16 +88,25 @@ public class MainScreenController implements Initializable {
 
         try {
             Connection conn = getConnection();
-            ResultSet resultSet = conn.createStatement().executeQuery("select * from songs");
+            PreparedStatement ps = conn.prepareStatement("select * from songs");
+            ResultSet resultSet = ps.executeQuery();
 
             while(resultSet.next()){
+                int id = resultSet.getInt("id");
+                //System.out.println(id);
+                //String Id = resultSet.getString("Id");
                 String ArtistBand = resultSet.getString("ArtistBand");
                 String Title = resultSet.getString("Title");
-                String Type = resultSet.getString("Type");
                 String Duration = resultSet.getString("Duration");
-                listenUpList.add(new ListenUp(ArtistBand, Title, Duration, Type));
+                String Type = resultSet.getString("Type");
+                String URL = resultSet.getString("URL");
+                //listenUpList.add(new ListenUp( ArtistBand, Title, Duration, Type));
+                listenUpList.add(new ListenUp(id,ArtistBand, Title, Duration, Type,URL));
             }
+            System.out.println(listenUpList);
+            //closeConnection(conn);
         }
+
             catch(SQLException e)
             {
             }
@@ -108,8 +115,6 @@ public class MainScreenController implements Initializable {
         tableViewTitle.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Title"));
         tableViewType.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Type"));
         tableViewDuration.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Duration"));
-
-
     }
 
     //gets all songs
@@ -141,7 +146,8 @@ public class MainScreenController implements Initializable {
 
     //NEED TO ADD CONDITIONS FOR ADDING SONGS (can't insert the song if it is already in the DB)
     public void addSongOnMouseClicked(MouseEvent mouseEvent) {
-        ListenUp song = new ListenUp(artistTextField.getText(),titleTextField.getText(),durationTextField.getText(),typeTextField.getText(),urlTextField.getText());
+        int id=0;
+        ListenUp song = new ListenUp(id,artistTextField.getText(),titleTextField.getText(),durationTextField.getText(), typeComboBox.getValue().toString(),urlTextField.getText());
         //ListenUp song = new ListenUp();
         try
         {
@@ -186,17 +192,8 @@ public class MainScreenController implements Initializable {
 //    }
 
 
-    public Connection getConnection() throws SQLException
-    {
-        return DriverManager.getConnection(CONNECTION_URL, "root", "strongpassword99!");
-    }
 
-    public void closeConnection(Connection conn) throws SQLException
-    {
-        conn.close();
-    }
-
-    public void delete(int id) {  //replaced bool with void
+    public void delete(int id) {  //replaced bool with void so it doesn't have to return anything
         try {
             Connection conn = getConnection();
             PreparedStatement ps = conn.prepareStatement("delete from songs where id = ?");
@@ -208,12 +205,40 @@ public class MainScreenController implements Initializable {
         }
         catch (SQLException e) {
             //return false;
+            System.out.println("An exception occurred");
         }
     }
 
     //THE ITEM IS SELECTED AND REMOVED ONLY THE FIRST TIME I EXECUTE THE CODE
+    //IF I USE ANY OTHER BUTTON FIRST, DELETE DOESN'T WORK ANYMORE
     public void DeleteSongOnMouseClicked(MouseEvent mouseEvent) {
         ListenUp selectedObject = tableViewObject.getSelectionModel().getSelectedItem();
-        delete(selectedObject.getId());
+        System.out.println(selectedObject);
+        if ( selectedObject != null )
+        {
+                delete(selectedObject.getId());
+        }
+    }
+
+    public void DeleteSongOnKeyPressed(KeyEvent keyEvent)
+    {
+        final ListenUp selectedObject = tableViewObject.getSelectionModel().getSelectedItem();
+        if ( selectedObject != null )
+        {
+            if ( keyEvent.getCode().equals( KeyCode.DELETE ) )
+            {
+                delete(selectedObject.getId());
+            }
+        }
+    }
+
+    public Connection getConnection() throws SQLException
+    {
+        return DriverManager.getConnection(CONNECTION_URL, "root", "strongpassword99!");
+    }
+
+    public void closeConnection(Connection conn) throws SQLException
+    {
+        conn.close();
     }
 }

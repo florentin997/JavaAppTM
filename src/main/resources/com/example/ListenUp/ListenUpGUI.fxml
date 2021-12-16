@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -45,10 +46,10 @@
             <Pane prefHeight="154.0" prefWidth="966.0">
                <children>
                   <TextField fx:id="artistTextField" alignment="CENTER" layoutX="60.0" layoutY="32.0" prefHeight="25.0" prefWidth="131.0" promptText="Artist/Band" />
-                  <TextField fx:id="typeTextField" alignment="CENTER" layoutX="479.0" layoutY="32.0" maxWidth="300.0" minWidth="100.0" prefHeight="25.0" prefWidth="135.0" promptText="Type of song" />
-                  <TextField fx:id="durationTextField" alignment="CENTER" layoutX="929.0" layoutY="32.0" maxWidth="300.0" minWidth="49.0" prefHeight="25.0" prefWidth="65.0" promptText="Duration" />
+                  <TextField fx:id="durationTextField" alignment="CENTER" layoutX="888.0" layoutY="32.0" maxWidth="300.0" minWidth="49.0" prefHeight="25.0" prefWidth="65.0" promptText="Duration" />
                   <TextField fx:id="titleTextField" alignment="CENTER" layoutX="246.0" layoutY="32.0" prefHeight="25.0" prefWidth="130.0" promptText="Title" />
-                  <TextField fx:id="urlTextField" accessibleRole="HYPERLINK" alignment="CENTER" layoutX="706.0" layoutY="32.0" maxWidth="300.0" minWidth="100.0" promptText="youtube URL" />
+                  <TextField fx:id="urlTextField" accessibleRole="HYPERLINK" alignment="CENTER" layoutX="668.0" layoutY="32.0" maxWidth="300.0" minWidth="100.0" promptText="youtube URL" />
+                  <ComboBox fx:id="typeComboBox" layoutX="462.0" layoutY="32.0" prefHeight="25.0" prefWidth="115.0" promptText="Type " />
                </children>
             </Pane>
             <HBox alignment="CENTER" prefHeight="8.0" prefWidth="966.0">
@@ -92,13 +93,14 @@
       </VBox>
    </bottom>
    <center>
-      <TableView fx:id="tableViewObject" prefWidth="753.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableViewObject" onKeyPressed="#DeleteSongOnKeyPressed" prefWidth="753.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="tableViewArtist" prefWidth="273.0" text="Artist/Band" />
-          <TableColumn fx:id="tableViewTitle" minWidth="0.0" prefWidth="269.0" text="Title" />
-            <TableColumn fx:id="tableViewType" prefWidth="118.0" text="Type" />
-            <TableColumn fx:id="tableViewDuration" minWidth="0.0" prefWidth="68.0" text="Duration" />
-            <TableColumn fx:id="tableViewCheckBox" minWidth="0.0" prefWidth="33.0" />
+            <TableColumn fx:id="tableViewId" prefWidth="24.80000340938568" text="Id" />
+          <TableColumn fx:id="tableViewArtist" prefWidth="235.20001792907715" text="Artist/Band" />
+          <TableColumn fx:id="tableViewTitle" minWidth="0.0" prefWidth="351.9999084472656" text="Title" />
+            <TableColumn fx:id="tableViewType" prefWidth="88.00006103515625" text="Type" />
+            <TableColumn fx:id="tableViewDuration" minWidth="0.0" prefWidth="60.7999267578125" text="Duration" />
+            <TableColumn fx:id="tableViewCheckBox" minWidth="0.0" prefWidth="12.79986572265625" />
         </columns>
       </TableView>
    </center>
