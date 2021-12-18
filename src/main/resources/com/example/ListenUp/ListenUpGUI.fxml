@@ -27,7 +27,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <TreeView prefHeight="343.0" prefWidth="250.0" />
+            <TreeView fx:id="treeViewObject" editable="true" prefHeight="343.0" prefWidth="250.0" />
             <Pane prefHeight="84.0" prefWidth="239.0">
                <children>
                   <Button id="create_new_playlist_button" fx:id="create_new_playlist_button" alignment="CENTER" layoutX="43.0" layoutY="17.0" mnemonicParsing="false" style="-fx-background-color: #f9a924;" text="Create new playlist">
@@ -95,12 +95,10 @@
    <center>
       <TableView fx:id="tableViewObject" onKeyPressed="#DeleteSongOnKeyPressed" prefWidth="753.0" BorderPane.alignment="CENTER">
         <columns>
-            <TableColumn fx:id="tableViewId" prefWidth="24.80000340938568" text="Id" />
-          <TableColumn fx:id="tableViewArtist" prefWidth="235.20001792907715" text="Artist/Band" />
-          <TableColumn fx:id="tableViewTitle" minWidth="0.0" prefWidth="351.9999084472656" text="Title" />
-            <TableColumn fx:id="tableViewType" prefWidth="88.00006103515625" text="Type" />
-            <TableColumn fx:id="tableViewDuration" minWidth="0.0" prefWidth="60.7999267578125" text="Duration" />
-            <TableColumn fx:id="tableViewCheckBox" minWidth="0.0" prefWidth="12.79986572265625" />
+          <TableColumn fx:id="tableViewArtist" prefWidth="263.0" text="Artist/Band" />
+          <TableColumn fx:id="tableViewTitle" minWidth="0.0" prefWidth="331.0" text="Title" />
+            <TableColumn fx:id="tableViewType" prefWidth="109.0" text="Type" />
+            <TableColumn fx:id="tableViewDuration" minWidth="0.0" prefWidth="55.0" text="Duration" />
         </columns>
       </TableView>
    </center>

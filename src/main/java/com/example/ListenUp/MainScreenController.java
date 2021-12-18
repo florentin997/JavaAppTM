@@ -2,24 +2,16 @@ package com.example.ListenUp;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-
-import javax.security.auth.callback.Callback;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
+
 
 public class MainScreenController implements Initializable {
 
@@ -31,18 +23,20 @@ public class MainScreenController implements Initializable {
     @FXML
     Button create_new_playlist_button;
 
-    @FXML
-    private Button add_button;
-
-    @FXML
-    private Button delete_button;
-
-    @FXML
-    private Button see_all_button;
+//    @FXML
+//    private Button add_button;
+//
+//    @FXML
+//    private Button delete_button;
+//
+//    @FXML
+//    private Button see_all_button;
 
     //The entire table
     @FXML
     private TableView<ListenUp> tableViewObject;
+    @FXML
+    private TreeView<String> treeViewObject = new TreeView<>();
     //Columns
     @FXML
     private TableColumn<ListenUp, String> tableViewId;
@@ -62,7 +56,6 @@ public class MainScreenController implements Initializable {
     @FXML
     private ComboBox typeComboBox=new ComboBox();
 
-
     String ArtistBand,title,type,URL;
     String duration; //duration should be changed to a data type that allows easy conversion to TIME (in MySQL)
 
@@ -72,7 +65,6 @@ public class MainScreenController implements Initializable {
     public void initialize(java.net.URL url, ResourceBundle resourceBundle) {
 
         //set up the columns in the table
-        //tableViewId.setCellValueFactory(new PropertyValueFactory<ListenUp,String>("Id"));
         tableViewArtist.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("ArtistBand"));
         tableViewTitle.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Title"));
         //tableViewType.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Type"));
@@ -80,6 +72,21 @@ public class MainScreenController implements Initializable {
         tableViewDuration.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Duration"));
 
         tableViewObject.setItems(getAllSongs());
+        tableViewObject.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        TreeItem root = new TreeItem("Playlists");
+
+        TreeItem webItem = new TreeItem("Rock");
+        webItem.getChildren().add(new TreeItem("R1"));
+        webItem.getChildren().add(new TreeItem("R2"));
+        root.getChildren().add(webItem);
+
+        TreeItem javaItem = new TreeItem("Pop");
+        javaItem.getChildren().add(new TreeItem("P1"));
+        javaItem.getChildren().add(new TreeItem("P2"));
+
+        root.getChildren().add(javaItem);
+        treeViewObject.setRoot(root);
     }
 
     public void SeeAllSongsOnMouseClick(MouseEvent mouseEvent) throws SQLException {
@@ -93,18 +100,13 @@ public class MainScreenController implements Initializable {
 
             while(resultSet.next()){
                 int id = resultSet.getInt("id");
-                //System.out.println(id);
-                //String Id = resultSet.getString("Id");
                 String ArtistBand = resultSet.getString("ArtistBand");
                 String Title = resultSet.getString("Title");
                 String Duration = resultSet.getString("Duration");
                 String Type = resultSet.getString("Type");
                 String URL = resultSet.getString("URL");
-                //listenUpList.add(new ListenUp( ArtistBand, Title, Duration, Type));
                 listenUpList.add(new ListenUp(id,ArtistBand, Title, Duration, Type,URL));
             }
-            System.out.println(listenUpList);
-            //closeConnection(conn);
         }
 
             catch(SQLException e)
@@ -173,26 +175,6 @@ public class MainScreenController implements Initializable {
     }
 
 
-
-//    public void DeleteSongOnMouseClicked(MouseEvent mouseEvent)
-//    {
-//        ListenUp selectedObject = tableViewObject.getSelectionModel().getSelectedItem();
-//        int selectedItemID = selectedObject.getId();
-//        try
-//        {
-//            Connection conn = getConnection();
-//            PreparedStatement ps = conn.prepareStatement("delete from songs where id = ?");
-//            ps.setInt(1, selectedItemID);  //1 stands for the index of the given parameters
-//            closeConnection(conn);
-//        }
-//        catch(SQLException e)
-//        {
-//
-//        }
-//    }
-
-
-
     public void delete(int id) {  //replaced bool with void so it doesn't have to return anything
         try {
             Connection conn = getConnection();
@@ -209,14 +191,39 @@ public class MainScreenController implements Initializable {
         }
     }
 
-    //THE ITEM IS SELECTED AND REMOVED ONLY THE FIRST TIME I EXECUTE THE CODE
-    //IF I USE ANY OTHER BUTTON FIRST, DELETE DOESN'T WORK ANYMORE
+//    public void delete() {  //replaced bool with void so it doesn't have to return anything
+//            ObservableList<ListenUp> selectedSongs;
+//            //selectedSongs = tableViewObject.getItems();
+//            selectedSongs = tableViewObject.getSelectionModel().getSelectedItems();
+//            for(int i = selectedSongs.size(); i==5; i++){
+//                    selectedSongs.add(new ListenUp(0,null,null,null,null,null));
+//                    System.out.println(selectedSongs.get(i).getId());
+//            }
+//
+//        try {
+//            Connection conn = getConnection();
+//            PreparedStatement ps = conn.prepareStatement("delete from songs where id in(?,?,?,?,?)");
+//            ps.setInt(1, selectedSongs.get(0).getId());
+//            ps.setInt(2, selectedSongs.get(1).getId());
+//            ps.setInt(3, selectedSongs.get(2).getId());
+//            ps.setInt(4, selectedSongs.get(3).getId());
+//            ps.setInt(5, selectedSongs.get(4).getId());
+//            ps.executeUpdate();
+//            //int affectedRows = ps.executeUpdate();
+//            closeConnection(conn);
+//            //return affectedRows == 1;
+//        }
+//        catch (SQLException e) {
+//            //return false;
+//            System.out.println("An exception occurred");
+//        }
+//    }
+
     public void DeleteSongOnMouseClicked(MouseEvent mouseEvent) {
         ListenUp selectedObject = tableViewObject.getSelectionModel().getSelectedItem();
-        System.out.println(selectedObject);
         if ( selectedObject != null )
         {
-                delete(selectedObject.getId());
+                delete(selectedObject.getId());//selectedObject.getId()
         }
     }
 
@@ -227,7 +234,7 @@ public class MainScreenController implements Initializable {
         {
             if ( keyEvent.getCode().equals( KeyCode.DELETE ) )
             {
-                delete(selectedObject.getId());
+                delete(selectedObject.getId()); //selectedObject.getId()
             }
         }
     }

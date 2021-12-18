@@ -2,7 +2,7 @@ package com.example.ListenUp;
 
 
 
-// DE CURATAT CONSTRUCTORII, FOLOSIM DOAR UNUL
+
 public class ListenUp {
 
     private int id;
