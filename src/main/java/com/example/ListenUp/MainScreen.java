@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -14,8 +13,6 @@ public class MainScreen extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        //FXMLLoader fxmlLoader = new FXMLLoader(MainScreen.class.getResource("ListenUpGUI.fxml"));
-
         Parent root = FXMLLoader.load(getClass().getResource("ListenUpGUI.fxml")); //newly added
 
         Scene scene = new Scene(root);
