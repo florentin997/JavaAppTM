@@ -1,5 +1,6 @@
 package com.example.ListenUp;
 
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +22,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.awt.*;
 import java.io.IOException;
@@ -30,6 +33,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.Date;
 
@@ -40,7 +44,6 @@ public class MainScreenController implements Initializable {
 
     //private ArrayList id,song_name, song_artist,yt_link;
 
-    Calendar time = new GregorianCalendar();
 
     @FXML
     Button create_new_playlist_button;
@@ -80,19 +83,22 @@ public class MainScreenController implements Initializable {
     @FXML
     private ComboBox typeComboBox=new ComboBox();
 
-    Runtime runtime = Runtime.getRuntime();
 
-    Timer timer = new Timer();
-    TimerTask exitApp = new TimerTask() {
-        @Override
-        public void run() {
-            try {
-                runtime.exec("killall -9  firefox");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    };
+    Calendar time = new GregorianCalendar();
+
+//    Runtime runtime = Runtime.getRuntime();
+
+//    Timer timer = new Timer();
+//    TimerTask exitApp = new TimerTask() {
+//        @Override
+//        public void run() {
+//            try {
+//                runtime.exec("killall -9  firefox");
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    };
 
     //used in WebPageController to get the SelectedItemURL and play it in the webView window
     public String selectedItemURL(){
@@ -110,9 +116,23 @@ public class MainScreenController implements Initializable {
             webpg.DisplayVideo(tableViewObject.getSelectionModel().getSelectedItem().getURL());
 
             Stage stage = new Stage();
+            stage.setTitle("ListenUp!");
+            stage.getIcons().add(new Image("C:/Users/Flavius/IdeaProjects/JavaAppTM/ListenUp.png"));
             stage.setScene(new Scene(root));
             stage.show();
 
+            //takes the current clock time
+            //LocalDateTime now = LocalDateTime.now();
+            //adds the time to the current time
+            //timer.schedule(exitApp, time.getTime().getTime());
+            //close the window
+            String seconds = tableViewObject.getSelectionModel().getSelectedItem().getDuration();
+            LocalTime localTime = LocalTime.parse(seconds);
+            int millis = localTime.toSecondOfDay()+5;
+            System.out.println(seconds);
+            PauseTransition delay = new PauseTransition(Duration.seconds(millis));
+            delay.setOnFinished( event1 -> stage.close() );
+            delay.play();
         }
         catch (IOException e) {
             e.printStackTrace();
