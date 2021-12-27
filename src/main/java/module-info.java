@@ -10,6 +10,7 @@ module com.example.javaapptm {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires java.sql;
+    requires java.desktop; //added this so i can use desktop.getDesktop()
 
     opens com.example.ListenUp to javafx.fxml;
     exports com.example.ListenUp;

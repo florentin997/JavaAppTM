@@ -27,7 +27,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <TreeView fx:id="treeViewObject" editable="true" prefHeight="343.0" prefWidth="250.0" />
+            <TreeView fx:id="treeViewObject" editable="true" prefHeight="335.0" prefWidth="250.0" />
             <Pane prefHeight="84.0" prefWidth="239.0">
                <children>
                   <Button id="create_new_playlist_button" fx:id="create_new_playlist_button" alignment="CENTER" layoutX="43.0" layoutY="17.0" mnemonicParsing="false" style="-fx-background-color: #f9a924;" text="Create new playlist">
@@ -60,6 +60,14 @@
                   <Blend />
                </effect>
                <children>
+                  <Button mnemonicParsing="false" onAction="#GetUrlOnMouseClicked" prefHeight="35.0" prefWidth="90.0" style="-fx-background-color: #bf2dcd;" text="Play">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="5.0" right="50.0" />
+                     </HBox.margin>
+                  </Button>
                   <Button fx:id="add_button" mnemonicParsing="false" onMouseClicked="#addSongOnMouseClicked" prefHeight="35.0" prefWidth="111.0" style="-fx-background-color: #81ed67;" text="Add" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="16.0" />

@@ -2,16 +2,36 @@ package com.example.ListenUp;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import java.sql.*;
-import java.util.ResourceBundle;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.Date;
 
 public class MainScreenController implements Initializable {
 
@@ -19,6 +39,8 @@ public class MainScreenController implements Initializable {
     public static final String CONNECTION_URL = "jdbc:mysql://localhost/listenUp_db";
 
     //private ArrayList id,song_name, song_artist,yt_link;
+
+    Calendar time = new GregorianCalendar();
 
     @FXML
     Button create_new_playlist_button;
@@ -52,12 +74,65 @@ public class MainScreenController implements Initializable {
     @FXML
     private TextField artistTextField,durationTextField,titleTextField, urlTextField;
 
+//    @FXML
+//    private WebView webView;
     //ObservableList<String> musicTypes = FXCollections.observableArrayList();
     @FXML
     private ComboBox typeComboBox=new ComboBox();
 
-    String ArtistBand,title,type,URL;
-    String duration; //duration should be changed to a data type that allows easy conversion to TIME (in MySQL)
+    Runtime runtime = Runtime.getRuntime();
+
+    Timer timer = new Timer();
+    TimerTask exitApp = new TimerTask() {
+        @Override
+        public void run() {
+            try {
+                runtime.exec("killall -9  firefox");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    //used in WebPageController to get the SelectedItemURL and play it in the webView window
+    public String selectedItemURL(){
+        return tableViewObject.getSelectionModel().getSelectedItem().getURL();
+    }
+
+    //open youtube page
+    @FXML
+     void GetUrlOnMouseClicked(ActionEvent event) throws URISyntaxException, IOException, ParseException {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("WebViewPage.fxml"));
+            Parent root = fxmlLoader.load();
+
+            WebPageController webpg = fxmlLoader.getController();
+            webpg.DisplayVideo(tableViewObject.getSelectionModel().getSelectedItem().getURL());
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        DateFormat df = new SimpleDateFormat("HH:mm:ss");
+//        Date selectedItemTime = df.parse(tableViewObject.getSelectionModel().getSelectedItem().getDuration());
+//        time.setTime(selectedItemTime);
+//        //Desktop.getDesktop().browse(new URI((tableViewObject.getSelectionModel().getSelectedItem().getURL())));
+//        //webView.getEngine().load(tableViewObject.getSelectionModel().getSelectedItem().getURL());
+//        //takes the current clock time
+//        LocalDateTime now = LocalDateTime.now();
+//        //adds the time to the current time
+//        timer.schedule(exitApp, time.getTime().getTime());
+//
+//        System.out.println(timer);
+//        //closes the window
+
+    }
+
 
     ObservableList<ListenUp> listenUpList = FXCollections.observableArrayList();
 
