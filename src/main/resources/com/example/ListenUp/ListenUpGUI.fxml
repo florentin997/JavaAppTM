@@ -30,7 +30,7 @@
             <TreeView fx:id="treeViewObject" editable="true" prefHeight="335.0" prefWidth="250.0" />
             <Pane prefHeight="84.0" prefWidth="239.0">
                <children>
-                  <Button id="create_new_playlist_button" fx:id="create_new_playlist_button" alignment="CENTER" layoutX="43.0" layoutY="17.0" mnemonicParsing="false" style="-fx-background-color: #f9a924;" text="Create new playlist">
+                  <Button id="create_new_playlist_button" alignment="CENTER" layoutX="84.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#CreatePlaylistButton" style="-fx-background-color: #f9a924;" text="Playlists">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>

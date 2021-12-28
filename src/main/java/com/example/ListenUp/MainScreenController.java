@@ -58,41 +58,9 @@ public class MainScreenController implements Initializable {
     private ComboBox typeComboBox=new ComboBox();
 
     //used in WebPageController to get the SelectedItemURL and play it in the webView window
-    public String selectedItemURL(){
-        return tableViewObject.getSelectionModel().getSelectedItem().getURL();
-    }
-
-    //open youtube page
-    @FXML
-     void GetUrlOnMouseClicked(ActionEvent event) throws URISyntaxException, IOException, ParseException {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("WebViewPage.fxml"));
-            Parent root = fxmlLoader.load();
-
-            WebPageController webpg = fxmlLoader.getController();
-            webpg.DisplayVideo(tableViewObject.getSelectionModel().getSelectedItem().getURL());
-
-            Stage stage = new Stage();
-            stage.setTitle("ListenUp!");
-            stage.getIcons().add(new Image("C:/Users/Flavius/IdeaProjects/JavaAppTM/ListenUp.png"));
-            stage.setScene(new Scene(root));
-            stage.show();
-                //get the duration of the song (as string) and convert it to LocalTime
-            String duration = tableViewObject.getSelectionModel().getSelectedItem().getDuration();
-            LocalTime localTime = LocalTime.parse(duration);
-                //create a seconds variable that stores the duration of the song plus a 5s delay (to count for the time it takes for the new stage to open)
-            int seconds = localTime.toSecondOfDay()+5;
-            //System.out.println(duration);
-            //close the stage after the song is finished
-            PauseTransition delay = new PauseTransition(Duration.seconds(seconds));
-            delay.setOnFinished( event1 -> stage.close() );
-            delay.play();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+//    public String selectedItemURL(){
+//        return tableViewObject.getSelectionModel().getSelectedItem().getURL();
+//    }
 
     ObservableList<ListenUp> listenUpList = FXCollections.observableArrayList();
 
@@ -124,6 +92,38 @@ public class MainScreenController implements Initializable {
         treeViewObject.setRoot(root);
     }
 
+
+    //open youtube page
+    @FXML
+    void GetUrlOnMouseClicked(ActionEvent event) throws URISyntaxException, IOException, ParseException {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("WebViewPage.fxml"));
+            Parent root = fxmlLoader.load();
+
+            WebPageController webpg = fxmlLoader.getController();
+            webpg.DisplayVideo(tableViewObject.getSelectionModel().getSelectedItem().getURL());
+
+            Stage stage = new Stage();
+            stage.setTitle("ListenUp!");
+            stage.getIcons().add(new Image("C:/Users/Flavius/IdeaProjects/JavaAppTM/ListenUp.png"));
+            stage.setScene(new Scene(root));
+            stage.show();
+            //get the duration of the song (as string) and convert it to LocalTime
+            String duration = tableViewObject.getSelectionModel().getSelectedItem().getDuration();
+            LocalTime localTime = LocalTime.parse(duration);
+            //create a seconds variable that stores the duration of the song plus a 5s delay (to count for the time it takes for the new stage to open)
+            int seconds = localTime.toSecondOfDay()+5;
+            //System.out.println(duration);
+            //close the stage after the song is finished
+            PauseTransition delay = new PauseTransition(Duration.seconds(seconds));
+            delay.setOnFinished( event1 -> stage.close() );
+            delay.play();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void SeeAllSongsOnMouseClick(MouseEvent mouseEvent) throws SQLException {
 
         tableViewObject.getItems().clear();
@@ -133,21 +133,17 @@ public class MainScreenController implements Initializable {
             PreparedStatement ps = conn.prepareStatement("select * from songs");
             ResultSet resultSet = ps.executeQuery();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String ArtistBand = resultSet.getString("ArtistBand");
                 String Title = resultSet.getString("Title");
                 String Duration = resultSet.getString("Duration");
                 String Type = resultSet.getString("Type");
                 String URL = resultSet.getString("URL");
-                listenUpList.add(new ListenUp(id,ArtistBand, Title, Duration, Type,URL));
+                listenUpList.add(new ListenUp(id, ArtistBand, Title, Duration, Type, URL));
             }
         }
-
-            catch(SQLException e)
-            {
-            }
-
+            catch(SQLException e) {}
         tableViewArtist.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("ArtistBand"));
         tableViewTitle.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Title"));
         tableViewType.setCellValueFactory(new PropertyValueFactory<ListenUp, String>("Type"));
@@ -255,5 +251,21 @@ public class MainScreenController implements Initializable {
     public void closeConnection(Connection conn) throws SQLException
     {
         conn.close();
+    }
+
+    public void CreatePlaylistButton(MouseEvent mouseEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("NewPlaylistPage.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Playlist");
+            stage.getIcons().add(new Image("C:/Users/Flavius/IdeaProjects/JavaAppTM/ListenUp.png"));
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -5,23 +5,27 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 
 
 <AnchorPane prefHeight="461.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ListenUp.PlaylistController">
    <children>
-      <TableView fx:id="tableViewObjectPlaylist" prefHeight="311.0" prefWidth="938.0">
+      <TableView fx:id="tableViewObjectPlaylist"  prefHeight="311.0" prefWidth="938.0">
          <columns>
             <TableColumn fx:id="tableViewArtist" prefWidth="401.0" text="Artist/Band" />
             <TableColumn fx:id="tableViewTitle" minWidth="0.0" prefWidth="346.0" text="Title" />
             <TableColumn fx:id="tableViewType" prefWidth="115.0" text="Type" />
             <TableColumn fx:id="tableViewDuration" minWidth="0.0" prefWidth="59.199951171875" text="Duration" />
          </columns>
+         <effect>
+            <Blend />
+         </effect>
       </TableView>
       <TextField fx:id="playlistTitleTextField" alignment="CENTER" layoutX="371.0" layoutY="325.0" prefHeight="25.0" prefWidth="197.0" promptText="Playlist Title" />
       <Button layoutX="371.0" layoutY="369.0" mnemonicParsing="false" onMouseClicked="#AddSongsToPlaylistButton" prefHeight="25.0" prefWidth="55.0" style="-fx-background-color: #81ed67;" text="Add" />
       <Button layoutX="513.0" layoutY="369.0" mnemonicParsing="false" onMouseClicked="#DeletePlaylistButton" prefHeight="25.0" prefWidth="55.0" style="-fx-background-color: #fa5954;" text="Delete" />
       <Button disable="true" layoutX="442.0" layoutY="369.0" mnemonicParsing="false" onMouseClicked="#UpdatePlaylistButton" style="-fx-background-color: #1ed1d9;" text="Update" />
-      <ToggleButton fx:id="toggleButtonPlaylist" layoutX="410.0" layoutY="412.0" mnemonicParsing="false" style="-fx-background-color: #FBB117;" text="Add songs by artist" textAlignment="CENTER" />
+      <ToggleButton fx:id="toggleButtonPlaylist" layoutX="410.0" layoutY="412.0" mnemonicParsing="false" text="Add songs by artist" textAlignment="CENTER" />
    </children>
 </AnchorPane>
