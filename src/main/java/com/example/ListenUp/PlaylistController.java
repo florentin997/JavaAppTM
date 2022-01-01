@@ -1,14 +1,18 @@
 package com.example.ListenUp;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 import java.sql.*;
-import java.util.ResourceBundle;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class PlaylistController {
 
@@ -30,7 +34,10 @@ public class PlaylistController {
     private TableColumn<ListenUp, String> tableViewArtist, tableViewTitle, tableViewType, tableViewDuration;
     @FXML
     private ToggleButton toggleButtonPlaylist;
-
+    @FXML
+    private TextField playlistTitleTextField;
+    @FXML
+    private Button seePlaylistsButton;
 
     public void initialize() {
 
@@ -44,9 +51,84 @@ public class PlaylistController {
         tableViewObjectPlaylist.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
+    public static ObservableList<ListenUp> GetAllSongsByArtist(ObservableList<ListenUp> list,String artistName) {
+        ObservableList<ListenUp> songsByArtist = FXCollections.observableArrayList();
+        for (ListenUp song : list) {
+            if (song.getArtistBand().toLowerCase().equals(artistName.toLowerCase())) {
+                songsByArtist.add(song);
+            }
+        }
+        return songsByArtist;
+    }
 
    //adds all selected songs to the playlist table from the DB
-    public void AddSongsToPlaylistButton(MouseEvent mouseEvent) {
+    public void AddSongsToPlaylistButton(MouseEvent mouseEvent) throws SQLException {
+
+        boolean toggledButton = toggleButtonPlaylist.selectedProperty().get();
+
+        ObservableList<ListenUp> songsList = tableViewObjectPlaylist.getSelectionModel().getSelectedItems();
+
+        if(toggledButton){
+            String playlistTitle = playlistTitleTextField.getText();
+
+            //get all songs from the table
+            ObservableList<ListenUp> allSongsFromDB = tableViewObjectPlaylist.getItems();
+
+            //get the name of the selected artist/band
+            String artistBandName = tableViewObjectPlaylist.getSelectionModel().getSelectedItem().getArtistBand();
+
+            ObservableList<ListenUp> allSongsBySelectedArtist =   GetAllSongsByArtist(allSongsFromDB,artistBandName);
+            System.out.println(allSongsBySelectedArtist);
+            try
+            {
+                for(ListenUp l: allSongsBySelectedArtist){
+                    Connection conn = getConnection();
+                    PreparedStatement ps = conn.prepareStatement("insert into playlist(PlaylistTitle, idSong) values(?,?) ", Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(1, playlistTitle);
+                    ps.setInt(2,l.getId());
+                    int affectedRows = ps.executeUpdate();
+
+                    ResultSet rs = ps.getGeneratedKeys();
+                    if(rs.next())
+                    {
+                        rs.getInt(1);
+                    }
+                    closeConnection(conn);
+                }
+            }
+            catch(SQLException e)
+            {
+                e.printStackTrace();
+            };
+        }
+
+        for(ListenUp song : songsList ){
+            int idSong = song.getId();
+            String playlistTitle = playlistTitleTextField.getText();
+            String songName = song.getTitle();
+
+            try
+            {
+                Connection conn = getConnection();
+                PreparedStatement ps = conn.prepareStatement("insert into playlist(PlaylistTitle, idSong) values(?,?)", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, playlistTitle);
+                ps.setInt(2, idSong);
+
+                int affectedRows = ps.executeUpdate();
+
+                ResultSet rs = ps.getGeneratedKeys();
+                if(rs.next())
+                {
+                    song.setId(rs.getInt(1));
+                }
+                closeConnection(conn);
+            }
+            catch(SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     //deletes a playlist and all its content from the playlist list (doesn't delete the songs from the songs table, only the playlist table)
