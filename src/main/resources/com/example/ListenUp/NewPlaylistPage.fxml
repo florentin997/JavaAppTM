@@ -31,5 +31,6 @@
       <ListView layoutX="109.0" layoutY="314.0" prefHeight="142.0" prefWidth="223.0" />
       <Label alignment="CENTER" layoutX="40.0" layoutY="356.0" prefHeight="17.0" prefWidth="46.0" text="Playlists:" />
       <Button fx:id="seePlaylistsButton" layoutX="23.0" layoutY="383.0" mnemonicParsing="false" text="See Playlists" />
+      <Button fx:id="PlaySongs" layoutX="716.0" layoutY="361.0" mnemonicParsing="false" onMouseClicked="#Play" text="Play" />
    </children>
 </AnchorPane>

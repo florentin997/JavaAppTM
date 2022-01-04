@@ -91,7 +91,7 @@
 //				if(rs.next())
 //				{
 //					int id2 = rs.getInt("id");
-////					String nume= rs.getString("nume");
+//					String nume= rs.getString("nume");
 //					lis = new ListenUp(id2);
 //				}
 //				closeConnection(conn);

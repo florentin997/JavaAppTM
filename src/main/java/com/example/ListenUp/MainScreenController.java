@@ -79,23 +79,28 @@ public class MainScreenController implements Initializable {
 
         TreeItem root = new TreeItem("Playlists");
 
-        TreeItem webItem = new TreeItem("Rock");
-        webItem.getChildren().add(new TreeItem("R1"));
-        webItem.getChildren().add(new TreeItem("R2"));
+        PlaylistController pc = new PlaylistController();
+        List<String> pcTitles = List.of(pc.GetAllPlaylistsNames());
+
+        TreeItem webItem = new TreeItem(pcTitles.get(0));
+        webItem.getChildren().add(new TreeItem("first song"));
+        webItem.getChildren().add(new TreeItem("2nd song"));
         root.getChildren().add(webItem);
 
-        TreeItem javaItem = new TreeItem("Pop");
-        javaItem.getChildren().add(new TreeItem("P1"));
-        javaItem.getChildren().add(new TreeItem("P2"));
-
+        TreeItem javaItem = new TreeItem(pcTitles.get(1));
+        javaItem.getChildren().add(new TreeItem("first song"));
+        javaItem.getChildren().add(new TreeItem("2nd song"));
         root.getChildren().add(javaItem);
+
+
+
         treeViewObject.setRoot(root);
     }
-
 
     //open youtube page
     @FXML
     void GetUrlOnMouseClicked(ActionEvent event) throws URISyntaxException, IOException, ParseException {
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("WebViewPage.fxml"));
             Parent root = fxmlLoader.load();
@@ -118,6 +123,7 @@ public class MainScreenController implements Initializable {
             PauseTransition delay = new PauseTransition(Duration.seconds(seconds));
             delay.setOnFinished( event1 -> stage.close() );
             delay.play();
+
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -204,6 +210,7 @@ public class MainScreenController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
 
     public void delete(int id) {  //replaced bool with void so it doesn't have to return anything
