@@ -28,9 +28,9 @@
       <Button layoutX="513.0" layoutY="369.0" mnemonicParsing="false" onMouseClicked="#DeletePlaylistButton" prefHeight="25.0" prefWidth="55.0" style="-fx-background-color: #fa5954;" text="Delete" />
       <Button disable="true" layoutX="442.0" layoutY="369.0" mnemonicParsing="false" onMouseClicked="#UpdatePlaylistButton" style="-fx-background-color: #1ed1d9;" text="Update" />
       <ToggleButton fx:id="toggleButtonPlaylist" layoutX="410.0" layoutY="412.0" mnemonicParsing="false" text="Add songs by artist" textAlignment="CENTER" />
-      <ListView layoutX="109.0" layoutY="314.0" prefHeight="142.0" prefWidth="223.0" />
+      <ListView fx:id="PlaylistListView" layoutX="109.0" layoutY="314.0" prefHeight="142.0" prefWidth="223.0" />
       <Label alignment="CENTER" layoutX="40.0" layoutY="356.0" prefHeight="17.0" prefWidth="46.0" text="Playlists:" />
-      <Button fx:id="seePlaylistsButton" layoutX="23.0" layoutY="383.0" mnemonicParsing="false" text="See Playlists" />
+      <Button fx:id="seePlaylistsButton" layoutX="23.0" layoutY="383.0" mnemonicParsing="false" onMouseClicked="#SeeAllPlaylistsOnMouseClicked" text="See Playlists" />
       <Button fx:id="PlaySongs" layoutX="716.0" layoutY="361.0" mnemonicParsing="false" onMouseClicked="#Play" text="Play" />
    </children>
 </AnchorPane>

@@ -12,6 +12,9 @@ public class ListenUp {
     private String type;
     private String URL;
 
+    public ListenUp(){
+
+    }
 
     public ListenUp(int id, String artistBand, String title, String duration, String type, String URL) {
         this.id = id;
